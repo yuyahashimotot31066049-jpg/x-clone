@@ -56,14 +56,19 @@ export default async function HomePage() {
 
       <main>
         {posts && posts.length > 0 ? (
-          posts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post as Parameters<typeof PostCard>[0]["post"]}
-              currentUserId={user.id}
-              postUserId={post.user_id}
-            />
-          ))
+          posts.map((post) => {
+            const profiles = Array.isArray(post.profiles)
+              ? post.profiles[0] ?? null
+              : post.profiles ?? null;
+            return (
+              <PostCard
+                key={post.id}
+                post={{ ...post, profiles }}
+                currentUserId={user.id}
+                postUserId={post.user_id}
+              />
+            );
+          })
         ) : (
           <div className="py-16 text-center text-gray-500">
             まだ投稿がありません。最初のポストをしてみましょう！
